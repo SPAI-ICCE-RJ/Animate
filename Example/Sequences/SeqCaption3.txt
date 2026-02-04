@@ -1,0 +1,1 @@
+As sequências podem ser associadas a audios, entretanto a reprodução não é sincronizada, terá que inicar os dois de forma independente. A proporção de toda a animação é dada pelo primeiro quadro, tente não agruprar quadros de diferentes dimensões, esses serão distorcidos.

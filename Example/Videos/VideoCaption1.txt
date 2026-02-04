@@ -1,0 +1,1 @@
+O vídeo será reproduzido diretamente no player nativo do usuário, que precisará permitir essa ação e memorizá-la, se for de interesse.

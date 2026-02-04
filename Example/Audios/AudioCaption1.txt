@@ -1,0 +1,1 @@
+Este é um exemplo de como um áudio é inserido no APÊNDICE, se você não definir um AudioThumb'X'.jpg, este será o ícone exibido.

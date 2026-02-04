@@ -1,0 +1,1 @@
+As sequências de animações são interessantes para a exbição de figuras vetorizadas, sem perdas em compressão, ou manipulações mais práticas na taxa de quadros. Neste exemplo, as pausas foram realizadas por meio da edição do arquivo SeqTimeLine2.txt.

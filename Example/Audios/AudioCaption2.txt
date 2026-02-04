@@ -1,0 +1,1 @@
+Se um AudioThumb'X'.jpg for definido, será exibida a imagem de interesse relacionada ao áudio, conforme exemplo.

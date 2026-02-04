@@ -1,0 +1,389 @@
+\ProvidesPackage{Bib/laudo}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{indentfirst}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{lastpage}
+\usepackage{animate}
+\usepackage{xstring}
+\usepackage[font={small}]{caption}
+\usepackage{ifthen}
+\usepackage{fancyhdr}
+\usepackage{framed}
+\usepackage{epstopdf}
+\usepackage{filecontents}
+\usepackage{pgffor}
+\usepackage{hyperref}
+\usepackage{media9}
+\usepackage{xcolor}
+\usepackage{attachfile2}
+\usepackage{pdfpages}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{overpic}
+\usepackage{tikz}
+\usepackage{xparse}
+
+
+
+\catcode`\%=12
+\def\writepercent{%%}
+\catcode`\%=14
+
+\pagenumbering{roman}
+
+\newcounter{NumFolders}
+\newcounter{NumFiles}
+\newboolean{stopFolder}
+\newboolean{stopFile}
+\setcounter{NumFolders}{0}
+\newboolean{stopFileA}
+\newcounter{NumFilesA}
+\newboolean{stopFileF}
+\newcounter{NumFilesF}
+
+\renewcommand{\thefigure}{\Roman{figure}}
+\newcommand{\laudo}[1]{\def\laudonum{#1}}
+\newcommand{\pathframe}[1]{\def\pathname{#1}}
+\newcommand{\framerate}[1]{\def\fRate{#1}}
+\newcommand\vcent[1]{\vcenter{\hbox{#1}}}
+
+\newcommand\vcent[1]{\vcenter{\hbox{#1}}}
+\newcommand\loudspeaker[1][3]{\ensuremath{\vcent{\rule{.6ex}{.6ex}}\kern-.5ex%
+		\vcent{\scalebox{4}[6]{\rotatebox[origin=center]{90}{$\blacktriangle$}}}%
+		\ifnum#1>0\relax\kern.1ex\vcent{\scalebox{2}{\ttfamily)}}%
+		\ifnum#1>1\relax\kern-2.5ex\vcent{\scalebox{4}{\ttfamily)}}
+		\ifnum#1>2\relax\kern-4ex\vcent{\scalebox{5}{\ttfamily)}}%
+		\fi\fi\fi}%
+}
+\newcommand{\cadeado}{
+	\tikz[scale=4, line width=10pt]{
+		% Corpo do cadeado
+		\draw[rounded corners=2pt] (0,0) rectangle (0.6,0.6);
+		
+		% Arco superior 
+		\draw (0.15,0.6) -- (0.15,0.81);
+		\draw (0.45,0.6) -- (0.45,0.81);
+		\draw (0.15,0.8) arc[start angle=180,end angle=0,radius=0.15];
+		
+		% Fechadura no centro
+		\filldraw[black] (0.3,0.3) circle[radius=0.05];   % buraco da chave
+		\draw (0.3,0.25) -- (0.3,0.11);                   % pino interno
+		
+		\node[align=center] at (0.28,-0.15) {\textbf{Clique para abrir}};
+	}
+
+}
+
+
+\newcommand{\randbit}{%
+	\pgfmathsetmacro{\r}{rnd}
+	\pgfmathtruncatemacro{\bit}{ifthenelse(\r < 0.5, 0, 1)}
+	\bit
+}
+
+% Define comando \dadosimbolo para desenhar matriz 3x3 de 0 e 1
+
+\NewDocumentCommand{\dadosimbolo}{}{
+	\begin{tikzpicture}[scale=0.6, baseline={(current bounding box.center)}]
+		% Face frontal
+		\fill[gray!20] (0,0) rectangle (3,3);
+		\draw[thick] (0,0) rectangle (3,3);
+		
+		% Faces laterais para efeito 3D
+		\fill[gray!30] (3,3) -- ++(0.6,0.6) -- ++(-3,0) -- (0,3) -- cycle;
+		\fill[gray!15] (3,0) -- ++(0.6,0.6) -- ++(0,3) -- (3,3) -- cycle;
+		
+		% Arestas visíveis
+		\draw[thick] (3,3) -- ++(0.6,0.6);
+		\draw[thick] (3,0) -- ++(0.6,0.6);
+		\draw[thick] (0,3) -- ++(0.6,0.6);
+		
+		% Arestas do fundo (parte de trás do cubo)
+		\draw[thick] (0,3) -- (0.6,3.6);
+		\draw[thick] (0.6,3.6) -- (3.6,3.6);
+		\draw[thick] (3,3) -- (3.6,3.6);
+		
+		\draw[thick] (3,0) -- (3.6,0.6);
+		\draw[thick] (3.6,0.6) -- (3.6,3.6);
+%		\draw[thick] (0,0) -- (0.6,0.6);
+%		\draw[thick] (0.6,0.6) -- (3.6,0.6);
+		
+		% Matriz de bits 3x3 aleatória na face frontal
+		\foreach \i in {0,...,2} {
+			\foreach \j in {0,...,2} {
+			\node[font=\ttfamily, scale=1,align=center,text width=1em,inner sep=0pt] at (\j+0.5,2.5-\i + 0.1) {\randbit};
+			
+			}
+		}
+	\end{tikzpicture}
+}
+
+\newcommand{\front}{
+	\centering 
+	\topskip100pt
+	\vspace*{\fill}
+	\begin{tabular}{c}
+		{\fontsize{14pt}{12pt} \bfseries APÊNDICE MULTIMÍDIA}
+	\end{tabular}
+	\vspace*{\fill}
+
+\begin{framed}
+\begin{minipage}{\textwidth}
+\setlength{\parindent}{15pt}
+
+\textbf{Considerações sobre as multimídias deste APÊNDICE:}
+\begin{itemize}
+	\item Nos computadores, as animações podem ser reproduzidas no programa Adobe Acrobat Reader X ou superior, bem como no programa Foxit PDF Reader V. 9 ou superior
+	\item As animações não possuem suporte para reprodução em sistemas Android ou iOS
+	\item Nos celulares, os áudios e vídeos podem ser acessados por meio do aplicativo Foxit PDF Editor 
+	\item Os áudios das animações não estão sincronizados com a reprodução das imagens e devem receber autorização do leitor de PDF para serem reproduzidos
+	\item Para acessar áudios e vídeos basta clicar na sua respectiva imagem, que esses serão reproduzidos no próprio aplicativo padrão do computador ou celular  	
+	\item Tanto animações, quanto áudios e vídeos não contemplam quadros e/ou qualidade dos arquivos de origem em sua integralidade
+	\item Esse APÊNDICE também serve de ANEXO de documentos no formato PDF com origem diversa
+	\item O presente documento pericial possui natureza NATO DIGITAL. Qualquer manipulação ou geração de documentos derivados a partir deste poderá comprometer sua integridade, prejudicando a visualização dos dados nele contidos.
+	\item As animações são controladas pelos seguintes botões de comando:	
+\end{itemize} 	
+\end{minipage}
+\vspace{-12pt}
+\begin{flushleft}
+\begin{tabular}{ l l} 
+\qquad	\animategraphics[controls=play,scale=0.00001
+	]{1}{example-image-a4-numbered}{}{}  & \qquad \vspace{-12pt}  \\
+	
+\qquad	\animategraphics[
+	controls=step,scale=0.00001
+	]{1}{example-image-a4-numbered}{}{} & \qquad Iniciar reprodução da mídia  \vspace{-12pt}\\
+	
+\qquad	\animategraphics[
+	controls=stop,scale=0.00001
+	]{1}{example-image-a4-numbered}{}{}  & \qquad Reproduzir quadro a quadro \vspace{-12pt}\\
+	
+\qquad	\animategraphics[
+	controls=speed,scale=0.00001
+	]{1}{example-image-a4-numbered}{}{}  &  \qquad Pular para o primeiro ou para o último quadro \vspace{-12pt} \\
+	  & \qquad Ajustar velocidade de reprodução \vspace{-12pt}
+
+\end{tabular}
+\end{flushleft}
+\end{framed}
+	\clearpage
+}
+
+				
+\newcommand{\animations}{
+	\renewcommand{\figurename}{Animação}
+	\IfFileExists{\pathname/Sequences/Seq1/frame0.pdf}{}{\IfFileExists{\pathname/Sequences/Seq1/frame0.jpg}{}{\setboolean{stopFolder}{true}}}
+
+	\whiledo{\NOT\boolean{stopFolder}}{		
+		\setcounter{NumFiles}{0}
+		\stepcounter{NumFolders}
+		
+		\IfFileExists{\pathname/Sequences/Seq\theNumFolders/frame0.pdf}{\def\ext{.pdf} \epstopdfsetup{outdir=/Auxs/\theNumFolders}}{\def\ext{.jpg}}
+		
+		
+		
+		\IfFileExists{\pathname/Sequences/Seq\theNumFolders/frame0\ext}{\setboolean{stopFile}{false}}{
+			\addtocounter{NumFolders}{-1}
+			\setboolean{stopFolder}{true}
+		}
+		\whiledo{\NOT\boolean{stopFile}}{
+			\stepcounter{NumFiles}
+			
+			
+
+			\IfFileExists{\pathname/Sequences/Seq\theNumFolders/frame\theNumFiles\ext}{}{
+				\addtocounter{NumFiles}{-1}
+				\setboolean{stopFile}{true}
+				
+\StrSubstitute{\pathname}{/}{\@backslashchar}[\pathnames]
+				
+
+				\IfFileExists{\pathname/Sequences/SeqTimeLine\theNumFolders.txt}{
+				
+				\newwrite\copyfile  % open the file to write to
+				\immediate\openout\copyfile=SeqTimeLine\theNumFolders.txt
+				
+				\newread\file      % open the file to read from
+
+				\openin\file="\pathnames\@backslashchar Sequences\@backslashchar SeqTimeLine\theNumFolders.txt"
+				\begingroup\endlinechar=-1
+				\loop\unless\ifeof\file
+				\read\file to\fileline  % Read one line and store it into \fileline
+            % print the content into the pdf
+				\immediate\write\copyfile{\unexpanded\expandafter{\fileline}}  % print the content to copy.txt
+				\repeat
+				\endgroup		
+				\immediate\closeout\copyfile
+				\StrSubstitute{\pathname}{/}{\@backslashchar }[\pathnames]
+				}{			
+							
+				\newwrite\timefile
+				\immediate\openout\timefile=SeqTimeLine\theNumFolders.txt
+				
+				\immediate\write\timefile{ \writepercent ------------------------------------------- ^^J \writepercent [*]:[new frame rate]:[<list of transparencies>][:<JavaScript>] ^^J \writepercent `*' in the first column pauses animation   ^^J \writepercent -------------------Leave these four lines here----------------------- ^^J :\fRate:0} 
+				\foreach \fram in {1,...,\theNumFiles}{\immediate\write\timefile{ ::\fram}}				 
+				\immediate\closeout\timefile
+
+%				\expandafter\unexpanded{%-------------------------------------------------------------------  
+%					%[*]:[new frame rate]:[<list of transparencies>][:<JavaScript>]  
+%					% `*' in the first column pauses animation
+%					%-------------------------------------------------------------------  
+%					:\fRate:0
+%					\foreach \i in {1,...,\theNumFiles}{
+%						\:\:\i
+%				}}			
+
+
+				}
+			\begin{figure}	
+				\centering	
+				%					\animategraphics[controls,keepaspectratio,height=0.9\textheight,width=\textwidth]{\fRate}{\pathname/Seq\theNumFolders/frame}{0}{\theNumFiles}
+				\IfFileExists{\pathname/Sequences/Seq\theNumFolders/frame1\ext}{
+					\animategraphics[controls,keepaspectratio,
+					height=0.9\textheight,
+					width=\textwidth,
+					timeline=SeqTimeLine\theNumFolders.txt]{\fRate}{\pathname/Sequences/Seq\theNumFolders/frame}{0}{\theNumFiles}}{
+					\animategraphics[label=V\theNumFolders,
+					controls=none,keepaspectratio,
+					height=0.9\textheight,
+					width=\textwidth,
+					timeline=SeqTimeLine\theNumFolders.txt]{\fRate}{\pathname/Sequences/Seq\theNumFolders/frame}{0}{\theNumFiles}}
+			
+				\IfFileExists{\pathname/Sequences/SeqAudio\theNumFolders.mp3}{\vspace{0.5cm}
+					\includemedia[
+					activate=onclick,
+					addresource=\pathname/Sequences/SeqAudio\theNumFolders.mp3,	
+					flashvars={
+						source=\pathname/Sequences/SeqAudio\theNumFolders.mp3,
+						&autoPlay=true,
+					},
+					transparent,
+					%show APlayer's right-click menu
+					]{\color{black}\framebox[0.7\linewidth][c]{\Large\textbf{Reproduzir\qquad áudio.\qquad}}}{APlayer.swf}
+				}{}
+				\IfFileExists{\pathname/Sequences/SeqCaption\theNumFolders.txt}{\caption{\input{\pathname/Sequences/SeqCaption\theNumFolders.txt}}}{\caption{}}
+			\end{figure}
+	
+			}
+		}		
+}
+\clearpage
+}
+
+\newcommand{\videos}{
+	\renewcommand{\figurename}{Vídeo}
+	\setcounter{figure}{0}
+	\setcounter{NumFilesA}{0}
+	\IfFileExists{\pathname/Videos/Video1.mp4}{\setboolean{stopFileA}{true}}{}
+	\whiledo{\boolean{stopFileA}}{	
+		\stepcounter{NumFilesA}
+		\IfFileExists{\pathname/Videos/Video\theNumFilesA.mp4}{
+			\begin{figure}
+				\centering
+				\textattachfile[color=0 0 0]{Video\theNumFilesA.mp4}{\centering\includegraphics[keepaspectratio,height=0.5\textheight,width=0.7\textwidth,]{\pathname/Videos/VideoThumb\theNumFilesA.jpg}
+				}\\
+				\textbf{Clique para abrir}				
+				\IfFileExists{\pathname/Videos/VideoCaption\theNumFilesA.txt}{\caption{\input{\pathname/Videos/VideoCaption\theNumFilesA.txt}}}{\caption{}}			
+			\end{figure}
+		}{\setboolean{stopFileA}{false}}
+	}
+	\clearpage		
+}
+
+\newcommand{\audios}{
+	\renewcommand{\figurename}{Áudio}
+	\setcounter{figure}{0}
+\setcounter{NumFilesA}{0}
+\IfFileExists{\pathname/Audios/Audio1.mp3}{\setboolean{stopFileA}{true}}{}
+		\whiledo{\boolean{stopFileA}}{	
+			\stepcounter{NumFilesA}
+			\IfFileExists{\pathname/Audios/Audio\theNumFilesA.mp3}{
+				\begin{figure}
+					\centering
+					\IfFileExists{\pathname/Audios/AudioThumb\theNumFilesA.jpg}{\centering\textattachfile[color=0 0 0]{Audio\theNumFilesA.mp3}{\centering\includegraphics[width=0.6\textwidth]{\pathname/Audios/AudioThumb\theNumFilesA.jpg}}\\
+						\textbf{Clique para abrir}}{
+						\textattachfile[color=0 0 0]{Audio\theNumFilesA.mp3}{\centering\loudspeaker[3] \textbf{Clique para abrir}}}											
+					\IfFileExists{\pathname/Audios/AudioCaption\theNumFilesA.txt}{\caption{\input{\pathname/Audios/AudioCaption\theNumFilesA.txt}}}{\caption{}}			
+				\end{figure}
+		}{\setboolean{stopFileA}{false}}
+			}
+		\clearpage		
+}
+
+
+\newcommand{\attachments}{
+	\renewcommand{\figurename}{Documento}
+	\setcounter{figure}{0}
+	\setcounter{NumFilesF}{0}
+	\IfFileExists{\pathname/Files/File1.pdf}{\setboolean{stopFileF}{true}}{}
+	\whiledo{\boolean{stopFileF}}{	
+		\stepcounter{NumFilesF}
+		\IfFileExists{\pathname/Files/File\theNumFilesF.pdf}{
+			\begin{figure}
+				\centering\hspace{0.12\textwidth}
+				\textattachfile[color=0 0 0]{File\theNumFilesF.pdf}{\fbox{
+						\parbox[c]{0.5\textwidth}{\includegraphics[width=0.5\textwidth, page=1]{\pathname/Files/File\theNumFilesF.pdf}}}
+				}\newline \textbf{Clique para abrir}
+				\IfFileExists{\pathname/Files/FileCaption\theNumFilesF.txt}{\caption{\input{\pathname/Files/FileCaption\theNumFilesF.txt}}}{\caption{}}	
+			\end{figure}
+		}{\setboolean{stopFileF}{false}}
+	}
+\clearpage		
+}
+
+\newcommand{\datas}{
+	\renewcommand{\figurename}{Arquivo}
+	\setcounter{figure}{0}
+	\setcounter{NumFilesF}{0}
+	\IfFileExists{\pathname/Files/Data1.txt}{\setboolean{stopFileF}{true}}{}
+	\whiledo{\boolean{stopFileF}}{	
+		\stepcounter{NumFilesF}
+		\IfFileExists{\pathname/Files/Data\theNumFilesF.txt}{
+			\begin{figure}
+				\centering\hspace{0.22\textwidth}
+				\textattachfile[color=0 0 0]{\pathname/Files/Data\theNumFilesF.txt}{\dadosimbolo}\newline \textbf{Clique para abrir}
+				\IfFileExists{\pathname/Files/DataCaption\theNumFilesF.txt}{\caption{\input{\pathname/Files/DataCaption\theNumFilesF.txt}}}{\caption{}}	
+			\end{figure}
+		}{\setboolean{stopFileF}{false}}
+	}
+	\setcounter{figure}{0}
+\setcounter{NumFilesF}{0}
+\IfFileExists{\pathname/Files/Sheet1.csv}{\setboolean{stopFileF}{true}}{}
+\whiledo{\boolean{stopFileF}}{	
+	\stepcounter{NumFilesF}
+	\IfFileExists{\pathname/Files/Sheet\theNumFilesF.csv}{
+		\begin{figure}
+			\centering\hspace{0.22\textwidth}
+			\textattachfile[color=0 0 0]{\pathname/Files/Sheet\theNumFilesF.csv}{\dadosimbolo}\newline \textbf{Clique para abrir}
+			\IfFileExists{\pathname/Files/SheetCaption\theNumFilesF.txt}{\caption{\input{\pathname/Files/SheetCaption\theNumFilesF.txt}}}{\caption{}}	
+		\end{figure}
+	}{\setboolean{stopFileF}{false}}
+}
+		
+}
+	
+					
+
+\parindent0.75cm \parskip0pt              
+\setlength\voffset{-2cm}
+\setlength\hoffset{-2cm}
+\setlength\baselineskip{3cm}
+\setlength\textwidth{17.5cm}
+\setlength\textheight{24.5cm}
+
+\setlength{\topskip}{-10cm}
+
+
+\pagestyle{fancy}
+
+
+\rhead[\fancyplain{}{\bfseries\leftmark}]{\fancyplain{}{{\thepage}}}
+\chead{\laudonum}
+\cfoot{}
+
+
+

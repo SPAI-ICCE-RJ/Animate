@@ -1,0 +1,1 @@
+Você pode anexar arquivos no formato txt referentes a dados coletados, bem como arquivos de log, tabelas cvs, basta trocar a extensão do arquivo.

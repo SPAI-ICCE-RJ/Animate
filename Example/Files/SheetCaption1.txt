@@ -1,0 +1,1 @@
+Planilhas no formato CVS podem ser anexados ao laudo, como no exemplo.
