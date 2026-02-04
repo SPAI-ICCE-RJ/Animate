@@ -1,5 +1,5 @@
 # 🎞️ Animations Script — Instruções de Instalação  
-**Versão: 2.0 beta**
+**Versão: 2.1**
 
 ## 📦 Instalação
 
