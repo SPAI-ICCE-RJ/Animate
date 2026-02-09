@@ -113,10 +113,10 @@ if ($quiet -eq 1) {
     Write-Host "🗒️ Log: $logFile"
 }
 
-# Criar arquivo de caption com nome do arquivo original
+# Criar arquivo de caption com nome do arquivo original (UTF-8)
 New-Item -ItemType File -Path $captionFile -Force | Out-Null
 $inputFileName = Split-Path $inputFile -Leaf
-Add-Content -Path $captionFile -Value $inputFileName
+Add-Content -Path $captionFile -Value $inputFileName -Encoding UTF8
 
 if ($reduzirThumbs.ToUpper() -eq "S" -and (Test-Path $thumbOut)) {
     Write-Host "🗜️ Reduzindo tamanho do thumbnail: $(Split-Path $thumbOut -Leaf)" -ForegroundColor DarkGray
