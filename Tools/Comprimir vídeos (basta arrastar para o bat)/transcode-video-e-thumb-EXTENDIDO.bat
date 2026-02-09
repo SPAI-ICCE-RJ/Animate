@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 set "SCRIPT=%~dp0transcode-video-e-thumb-EXTENDIDO.ps1"
 
-set /p CASO="Digite o numero do CASO ("C:\Casos" se defir, se não vai para Downloads): "
+set /p CASO="Digite o numero do CASO (opcional): "
 set /p MOSTRAR="Mostrar saida detalhada do ffmpeg? (S/N): "
 set /p APAGAR_LOGS="Apagar arquivos de log? (S/N) [S]: "
 if not defined APAGAR_LOGS set APAGAR_LOGS=S
@@ -55,7 +55,7 @@ REM Calcular tamanho total dos arquivos gerados
 for /f "tokens=2 delims==" %%a in ('wmic logicaldisk where name^="C:" get freespace /value') do set DUMMY=%%a
 
 if defined CASO (
-    set "OUTDIR=C:\Casos\!CASO!\Multi\Videos"
+    set "OUTDIR=D:\Casos\!CASO!\Multi\Videos"
 ) else (
     set "OUTDIR=!USERPROFILE!\Downloads"
 )
